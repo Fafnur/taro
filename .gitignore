@@ -42,3 +42,14 @@ Thumbs.db
 .nx/workspace-data
 
 .angular
+
+# Custom
+.yarn
+package-lock.json
+yarn.lock
+/mocks/tmp
+.env
+.husky/*
+junit.xml
+/junit
+*.patch
