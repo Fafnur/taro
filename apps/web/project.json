@@ -1,33 +1,33 @@
 {
-  "name": "taro/web",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/taro/web/src",
+  "sourceRoot": "apps/web/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/taro/web",
-        "index": "apps/taro/web/src/index.html",
-        "browser": "apps/taro/web/src/main.ts",
+        "outputPath": "dist/apps/web",
+        "index": "apps/web/src/index.html",
+        "browser": "apps/web/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/taro/web/tsconfig.app.json",
+        "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/taro/web/public"
+            "input": "apps/web/public"
           }
         ],
-        "styles": ["apps/taro/web/src/styles.scss"],
+        "styles": ["apps/web/src/styles.scss"],
         "scripts": [],
-        "server": "apps/taro/web/src/main.server.ts",
+        "server": "apps/web/src/main.server.ts",
         "prerender": true,
         "ssr": {
-          "entry": "apps/taro/web/server.ts"
+          "entry": "apps/web/server.ts"
         }
       },
       "configurations": {
@@ -79,14 +79,14 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/taro/web/jest.config.ts"
+        "jestConfig": "apps/web/jest.config.ts"
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "taro/web:build",
-        "staticFilePath": "dist/apps/taro/web/browser",
+        "staticFilePath": "dist/apps/web/browser",
         "spa": true
       }
     }

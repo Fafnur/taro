@@ -1,8 +1,8 @@
 export default {
-  displayName: 'taro/web',
-  preset: '../../../jest.preset.js',
+  displayName: 'web',
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/apps/taro/web',
+  coverageDirectory: '../../coverage/apps/web',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
