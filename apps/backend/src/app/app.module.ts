@@ -9,7 +9,7 @@ import { configurationFactory, typeOrmFactory } from './config/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: resolve('apps/taro/backend/.env'),
+      envFilePath: resolve('apps/backend/.env'),
       isGlobal: true,
       load: [configurationFactory],
     }),
