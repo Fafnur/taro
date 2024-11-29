@@ -1,7 +1,7 @@
 {
   "name": "taro/backend",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/taro/backend/src",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/backend/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -38,7 +38,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/taro/backend/jest.config.ts"
+        "jestConfig": "apps/backend/jest.config.ts"
       }
     }
   }

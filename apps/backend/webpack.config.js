@@ -4,7 +4,7 @@ const { join } = require('path');
 
 module.exports = {
   output: {
-    path: join(__dirname, '../../../dist/apps/taro/backend'),
+    path: join(__dirname, '../../dist/apps/taro/backend'),
   },
   plugins: [
     new NxAppWebpackPlugin({
