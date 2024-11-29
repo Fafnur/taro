@@ -14,9 +14,9 @@ export function getTypeOrmConfig(): MysqlConnectionOptions {
     type: process.env.DATABASE_TYPE ?? 'mariadb',
     host: process.env.DATABASE_HOST ?? 'localhost',
     port: process.env.DATABASE_PORT ? Number(process.env.DATABASE_PORT) : 3306,
-    username: process.env.DATABASE_USER ?? 'tego',
+    username: process.env.DATABASE_USER ?? 'taro',
     password: process.env.DATABASE_PASSWORD ?? '123456',
-    database: process.env.DATABASE_NAME ?? 'tego',
+    database: process.env.DATABASE_NAME ?? 'taro',
     synchronize: process.env.DATABASE_SYNCHRONIZE ? process.env.DATABASE_SYNCHRONIZE === 'true' : true,
     entities: [`${__dirname}/**/*.entity.{ts,js}`, `${join(__dirname, '../../../../../')}libs/backend/**/*.entity.{ts,js}`],
   } as MysqlConnectionOptions;
