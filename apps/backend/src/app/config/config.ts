@@ -1,7 +1,7 @@
-import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { join } from 'node:path';
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import type { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 export interface Config {
   port: number;
