@@ -1,4 +1,4 @@
-export const enum UserStatus {
+export enum UserStatus {
   Base = 'base',
   Pro = 'pro',
   Banned = 'banned',
@@ -7,7 +7,7 @@ export const enum UserStatus {
 export interface User {
   readonly uuid: string;
   readonly email: string;
-  readonly status: UserStatus;
+  readonly status: 'base' | 'pro' | 'banned';
   readonly firstname?: string;
   readonly lastname?: string;
   readonly birthdate?: string;
