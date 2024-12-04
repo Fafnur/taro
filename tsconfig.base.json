@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@taro/backend/users": ["libs/backend/users/src/index.ts"],
       "@taro/users/common": ["libs/users/common/src/index.ts"]
     }
   },
