@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({
   name: 'auths',
@@ -13,6 +13,30 @@ export class AuthEntity {
   @Column()
   code!: string;
 
-  @Column({ name: 'valid_until' })
-  validUntil!: string;
+  @Column({
+    type: 'datetime',
+  })
+  expired!: Date;
+
+  @Column({
+    type: 'datetime',
+    nullable: true,
+  })
+  verified!: Date | null;
+
+  @CreateDateColumn({
+    type: 'datetime',
+  })
+  created!: Date;
+
+  @UpdateDateColumn({
+    type: 'datetime',
+    nullable: true,
+  })
+  updated!: Date;
+
+  @Column({
+    default: 0,
+  })
+  faults!: number;
 }

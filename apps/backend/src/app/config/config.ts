@@ -42,16 +42,16 @@ export async function typeOrmFactory(): Promise<TypeOrmModuleOptions> {
   };
 }
 
-// export function mailFactory(configService: ConfigService) {
-//   const transport = configService.get<string>('MAIL_TRANSPORT') ?? '';
-//   const from = configService.get<string>('MAIL_FROM') ?? '';
-//
-//   if (!transport || !from) {
-//     console.warn('Mail transport is empty.');
-//   }
-//
-//   return {
-//     transport,
-//     defaults: { from },
-//   };
-// }
+export function mailFactory() {
+  const transport = process.env.MAIL_TRANSPORT ?? '';
+  const from = process.env.MAIL_FROM ?? '';
+
+  if (!transport || !from) {
+    console.warn('Mail transport is empty.');
+  }
+
+  return {
+    transport,
+    defaults: { from },
+  };
+}

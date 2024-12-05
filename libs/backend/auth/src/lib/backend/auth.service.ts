@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,11 +6,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
 import { randomInt } from 'node:crypto';
 import type { Repository } from 'typeorm';
+import { Between, IsNull, LessThan } from 'typeorm';
 
 import type { AuthConfirm, AuthCredentials, AuthResponse } from '@taro/auth/common';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { UserService } from '@taro/backend/users';
-import { UserStatus } from '@taro/users/common';
 
 import { AuthEntity } from './auth.entity';
 
@@ -24,91 +24,111 @@ export class AuthService {
   ) {}
 
   async login(credentials: AuthCredentials): Promise<void> {
-    const user = await this.userService.findOneByEmail(credentials.email);
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
+    await this.checkBruteforce(credentials);
 
     return await this.sendOtp(credentials);
   }
 
   async confirm(credentials: AuthConfirm): Promise<AuthResponse> {
-    const otps = await this.authRepository.find({ where: { email: credentials.email }, order: { id: 'desc' } });
-    const otp = otps.length > 0 ? otps[0] : null;
+    await this.verifyOtp(credentials);
 
-    if (!otp || new Date(otp.validUntil).getTime() < new Date().getTime()) {
-      throw new BadRequestException({
-        otp: {
-          invalid: {
-            code: 'Token is expired',
-            message: 'Token is expired',
-          },
-        },
-      });
-    }
-
-    const user = await this.userService.findOneByEmail(credentials.email);
-
-    if (!user) {
-      throw new InternalServerErrorException({
-        user: {
-          invalid: 'User not found',
-        },
-      });
-    }
-
-    if (user.status === UserStatus.Created) {
-      await this.userService.update(user.uuid, { status: UserStatus.Verified });
-    }
-
-    return {
-      accessToken: this.jwtService.sign({ uuid: user.uuid }),
-      uuid: user.uuid,
-      email: user.email,
-    };
+    return await this.getJwtResponse(credentials);
   }
 
-  async register(payload: AuthRegister): Promise<void> {
-    const user = await this.userService.findOneByEmail(payload.email);
+  private async checkBruteforce({ email }: AuthCredentials): Promise<void> {
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setMinutes(startDate.getMinutes() - 5);
 
-    if (user) {
-      throw new BadRequestException({
-        email: {
-          invalid: 'User with email address already exists',
-        },
-      });
-    }
-
-    await this.userService.createUser({
-      ...payload,
-      status: UserStatus.Base,
+    const attempts = await this.authRepository.find({
+      where: {
+        email,
+        created: Between(startDate, currentDate),
+      },
+      order: { id: 'DESC' },
+      take: 5,
     });
 
-    return await this.sendOtp(payload);
+    if (attempts.length === 5) {
+      const expired = new Date(currentDate.setMinutes(currentDate.getMinutes() + 15));
+      throw new BadRequestException({
+        bruteforce: {
+          code: 'BRUTEFORCE',
+          message: 'Exceeded the number of login attempts.',
+          expired: expired.toISOString(),
+        },
+      });
+    }
   }
 
-  private async sendOtp(credentials: AuthCredentials): Promise<void> {
+  private async sendOtp({ email }: AuthCredentials): Promise<void> {
     const code = randomInt(0, 99999).toString().padStart(5, '0');
-    const validUntil = new Date();
-    validUntil.setDate(validUntil.getDate() + 1);
+    const expired = new Date();
+    expired.setMinutes(expired.getMinutes() + 10);
 
-    const otps = await this.authRepository.find({ where: { email: credentials.email }, order: { id: 'desc' } });
-    let otp = otps.length > 0 ? otps[0] : null;
-
-    if (otp && new Date(otp.validUntil).getTime() > new Date().getTime()) {
-      await this.authRepository.update({ id: otp.id }, { code, validUntil: validUntil.toISOString() });
-    } else {
-      otp = await this.authRepository.create({ email: credentials.email, code, validUntil: validUntil.toISOString() });
-    }
+    const otp = this.authRepository.create({ email, code, expired: expired });
     await this.authRepository.save(otp);
 
     if (process.env['NODE_ENV'] !== 'development') {
       await this.mailerService.sendMail({
-        to: credentials.email,
-        subject: 'Confirm code',
-        html: `<p>Ваш код подтверждения: ${code}</p>`,
+        to: email,
+        subject: 'OTP code',
+        text: `OTP: ${code}`,
       });
     }
+  }
+
+  private async verifyOtp(credentials: AuthConfirm): Promise<void> {
+    const [otp] = await this.authRepository.find({
+      where: {
+        email: credentials.email,
+        faults: LessThan(10),
+        verified: IsNull(),
+      },
+      order: { id: 'desc' },
+      take: 1,
+    });
+
+    if (!otp) {
+      throw new BadRequestException({
+        otp: {
+          code: 'INVALID_REQUEST',
+          message: 'Wrong email or otp',
+        },
+      });
+    }
+    if (otp.code !== credentials.code) {
+      otp.faults += 1;
+      await this.authRepository.save(otp);
+
+      throw new BadRequestException({
+        otp: {
+          code: 'INVALID_OTP',
+          message: 'Wrong email or otp',
+        },
+      });
+    }
+
+    if (otp.expired < new Date()) {
+      throw new BadRequestException({
+        otp: {
+          code: 'OTP_EXPIRED',
+          message: 'OTP is expired',
+        },
+      });
+    }
+
+    otp.verified = new Date();
+    await this.authRepository.save(otp);
+  }
+
+  private async getJwtResponse(credentials: AuthConfirm): Promise<AuthResponse> {
+    const user = await this.userService.findOrCreate(credentials.email);
+
+    return {
+      accessToken: this.jwtService.sign({ uuid: user.uuid }),
+      uuid: user.uuid,
+      email: credentials.email,
+    };
   }
 }

@@ -1,31 +1,18 @@
 ### Login
-POST http://localhost:3000/auth/login
+POST http://localhost:3333/auth/login
 Content-Type: application/json
 Accept: application/json
 
 {
   "email": "alex92.serenko@gmail.com"
 }
-
-### Register
-POST http://localhost:3000/auth/register
-Content-Type: application/json
-Accept: application/json
-
-
-{
-  "firstname": "Alex",
-  "lastname": "Serenko",
-  "email": "alex92.serenko@gmail.com"
-}
-
 
 ### Confirm
-POST http://localhost:3000/auth/confirm
+POST http://localhost:3333/auth/confirm
 Content-Type: application/json
 Accept: application/json
 
 {
   "email": "alex92.serenko@gmail.com",
-  "code": "07986"
+  "code": "44383"
 }

@@ -11,8 +11,8 @@ export interface User {
   readonly firstname?: string;
   readonly lastname?: string;
   readonly birthdate?: string;
-  readonly createdAt: string;
-  readonly updatedAt: string;
+  readonly created: string;
+  readonly updated: string;
 }
 
 export interface UserChange {
