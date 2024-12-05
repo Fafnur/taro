@@ -1,23 +1,26 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { MailerService } from '@nestjs-modules/mailer';
+import { hash, verify } from 'argon2';
 import { randomInt } from 'node:crypto';
 import type { Repository } from 'typeorm';
 import { Between, IsNull, LessThan } from 'typeorm';
 
-import type { AuthConfirm, AuthCredentials, AuthResponse } from '@taro/auth/common';
+import type { AuthConfirm, AuthCredentials, AuthLogout, AuthRefresh, AuthResponse } from '@taro/auth/common';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { UserService } from '@taro/backend/users';
 
 import { AuthEntity } from './auth.entity';
+import { AuthSessionsEntity } from './auth-sessions.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(AuthEntity) private readonly authRepository: Repository<AuthEntity>,
+    @InjectRepository(AuthSessionsEntity) private readonly authRefreshRepository: Repository<AuthSessionsEntity>,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
@@ -29,10 +32,20 @@ export class AuthService {
     return await this.sendOtp(credentials);
   }
 
-  async confirm(credentials: AuthConfirm): Promise<AuthResponse> {
+  async confirm(credentials: AuthConfirm, userAgent?: string): Promise<AuthResponse> {
     await this.verifyOtp(credentials);
 
-    return await this.getJwtResponse(credentials);
+    return await this.getJwtResponse(credentials.email, userAgent);
+  }
+
+  async refresh(refresh: AuthRefresh, userAgent?: string) {
+    await this.checkRefreshToken(refresh);
+
+    return this.getJwtResponse(refresh.email, userAgent);
+  }
+
+  async logout(logout: AuthLogout): Promise<void> {
+    await this.applyToken(logout);
   }
 
   private async checkBruteforce({ email }: AuthCredentials): Promise<void> {
@@ -52,11 +65,9 @@ export class AuthService {
     if (attempts.length === 5) {
       const expired = new Date(currentDate.setMinutes(currentDate.getMinutes() + 15));
       throw new BadRequestException({
-        bruteforce: {
-          code: 'BRUTEFORCE',
-          message: 'Exceeded the number of login attempts.',
-          expired: expired.toISOString(),
-        },
+        code: 'BRUTEFORCE',
+        message: 'Exceeded the number of login attempts.',
+        expired: expired.toISOString(),
       });
     }
   }
@@ -91,10 +102,8 @@ export class AuthService {
 
     if (!otp) {
       throw new BadRequestException({
-        otp: {
-          code: 'INVALID_REQUEST',
-          message: 'Wrong email or otp',
-        },
+        code: 'INVALID_REQUEST',
+        message: 'Wrong email or otp',
       });
     }
     if (otp.code !== credentials.code) {
@@ -102,19 +111,15 @@ export class AuthService {
       await this.authRepository.save(otp);
 
       throw new BadRequestException({
-        otp: {
-          code: 'INVALID_OTP',
-          message: 'Wrong email or otp',
-        },
+        code: 'INVALID_OTP',
+        message: 'Wrong email or otp',
       });
     }
 
     if (otp.expired < new Date()) {
       throw new BadRequestException({
-        otp: {
-          code: 'OTP_EXPIRED',
-          message: 'OTP is expired',
-        },
+        code: 'OTP_EXPIRED',
+        message: 'OTP is expired',
       });
     }
 
@@ -122,13 +127,60 @@ export class AuthService {
     await this.authRepository.save(otp);
   }
 
-  private async getJwtResponse(credentials: AuthConfirm): Promise<AuthResponse> {
-    const user = await this.userService.findOrCreate(credentials.email);
+  private async getJwtResponse(email: string, userAgent?: string): Promise<AuthResponse> {
+    const user = await this.userService.findOrCreate(email);
+    const accessToken = this.jwtService.sign({ uuid: user.uuid, email });
+    const refreshToken = this.jwtService.sign({ uuid: user.uuid, email }, { expiresIn: '14d' });
+
+    const refresh = this.authRefreshRepository.create({
+      email,
+      userAgent,
+      refreshToken: await hash(refreshToken),
+    });
+    await this.authRefreshRepository.save(refresh);
 
     return {
-      accessToken: this.jwtService.sign({ uuid: user.uuid }),
+      accessToken,
+      refreshToken,
       uuid: user.uuid,
-      email: credentials.email,
+      email,
     };
+  }
+
+  private async checkRefreshToken(refresh: AuthRefresh): Promise<void> {
+    const applied = this.applyToken(refresh);
+
+    if (!applied) {
+      throw new ForbiddenException({
+        code: 'ACCESS_DENIED',
+        message: 'Access Denied',
+      });
+    }
+  }
+
+  private async applyToken(logout: AuthLogout): Promise<boolean> {
+    const auths = await this.authRefreshRepository.find({
+      where: { email: logout.email, used: IsNull() },
+      order: { id: 'desc' },
+    });
+
+    if (!auths.length) {
+      throw new BadRequestException({
+        code: 'INVALID_REQUEST',
+        message: 'Wrong email',
+      });
+    }
+
+    let isEqual = false;
+    for (const auth of auths) {
+      isEqual = await verify(auth.refreshToken, logout.refreshToken);
+      if (isEqual) {
+        auth.used = new Date();
+        await this.authRefreshRepository.save(auth);
+        break;
+      }
+    }
+
+    return isEqual || !!logout.all;
   }
 }

@@ -9,15 +9,18 @@ import { UsersModule } from '@taro/backend/users';
 import { AuthController } from './auth.controller';
 import { AuthEntity } from './auth.entity';
 import { AuthService } from './auth.service';
+import { AuthSessionsEntity } from './auth-sessions.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthEntity]),
+    TypeOrmModule.forFeature([AuthEntity, AuthSessionsEntity]),
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: process.env?.['JWT_SECRET'] ?? '',
-      signOptions: { expiresIn: process.env?.['JWT_EXPIRES_IN'] ?? '60m' },
+      secret: process.env?.['JWT_SECRET'],
+      signOptions: {
+        expiresIn: process.env?.['JWT_EXPIRES_IN'],
+      },
     }),
   ],
   providers: [AuthService, JwtStrategy, JwtRefreshTokenStrategy],
