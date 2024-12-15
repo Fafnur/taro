@@ -1,8 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { MailerService } from '@nestjs-modules/mailer';
 import { hash, verify } from 'argon2';
 import { randomInt } from 'node:crypto';
@@ -10,7 +8,6 @@ import type { Repository } from 'typeorm';
 import { Between, IsNull, LessThan } from 'typeorm';
 
 import type { AuthConfirm, AuthCredentials, AuthLogout, AuthRefresh, AuthResponse } from '@taro/auth/common';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { UserService } from '@taro/backend/users';
 
 import { AuthEntity } from './auth.entity';
@@ -73,7 +70,7 @@ export class AuthService {
   }
 
   private async sendOtp({ email }: AuthCredentials): Promise<void> {
-    const code = randomInt(0, 99999).toString().padStart(5, '0');
+    const code = randomInt(0, 999999).toString().padStart(6, '0');
     const expired = new Date();
     expired.setMinutes(expired.getMinutes() + 10);
 

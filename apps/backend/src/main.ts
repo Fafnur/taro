@@ -1,7 +1,9 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
+
+import { formExceptionFactory } from '@taro/backend/core';
 
 import { AppModule } from './app/app.module';
 
@@ -10,6 +12,13 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.use(cookieParser());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      exceptionFactory: formExceptionFactory,
+    }),
+  );
 
   const corsOptions = await configService.get('cors');
   app.enableCors(corsOptions);

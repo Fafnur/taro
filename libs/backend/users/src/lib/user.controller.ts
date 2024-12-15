@@ -3,7 +3,6 @@ import { Controller, Get, NotFoundException, Request, UseGuards } from '@nestjs/
 import { JwtAuthGuard } from '@taro/backend/jwt';
 import type { User } from '@taro/users/common';
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { UserService } from './user.service';
 
 @Controller('users')

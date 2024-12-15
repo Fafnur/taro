@@ -5,6 +5,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { resolve } from 'node:path';
 
 import { AuthModule } from '@taro/backend/auth';
+import { SpreadsModule } from '@taro/backend/spread';
 import { UsersModule } from '@taro/backend/users';
 
 import { AppController } from './app.controller';
@@ -25,7 +26,9 @@ import { configurationFactory, mailFactory, typeOrmFactory } from './config/conf
     }),
     AuthModule,
     UsersModule,
+    SpreadsModule,
   ],
   controllers: [AppController],
+  providers: [],
 })
 export class AppModule {}

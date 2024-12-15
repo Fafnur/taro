@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 import type { Spread } from '@taro/spreads/common';
 import { SpreadType } from '@taro/spreads/common';
@@ -7,8 +7,11 @@ import { SpreadType } from '@taro/spreads/common';
   name: 'spreads',
 })
 export class SpreadEntity implements Spread {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ length: 36 })
   uuid!: string;
+
+  @Column({ length: 36 })
+  user!: string;
 
   @Column({
     type: 'enum',
@@ -16,6 +19,23 @@ export class SpreadEntity implements Spread {
   })
   type!: SpreadType;
 
-  @Column()
+  @Column({
+    type: 'simple-array',
+    default: [],
+  })
   cards!: number[];
+
+  @Column({
+    type: 'simple-array',
+    default: [],
+  })
+  additional!: number[];
+
+  @CreateDateColumn()
+  created!: string;
+
+  @UpdateDateColumn({
+    nullable: true,
+  })
+  updated!: string;
 }

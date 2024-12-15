@@ -10,7 +10,9 @@ export class AuthEntity {
   @Column()
   email!: string;
 
-  @Column()
+  @Column({
+    length: 6,
+  })
   code!: string;
 
   @Column({
