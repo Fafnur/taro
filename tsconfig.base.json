@@ -17,6 +17,7 @@
     "paths": {
       "@taro/auth/common": ["libs/auth/common/src/index.ts"],
       "@taro/backend/auth": ["libs/backend/auth/src/index.ts"],
+      "@taro/backend/cards": ["libs/backend/cards/src/index.ts"],
       "@taro/backend/core": ["libs/backend/core/src/index.ts"],
       "@taro/backend/jwt": ["libs/backend/jwt/src/index.ts"],
       "@taro/backend/spread": ["libs/backend/spread/src/index.ts"],
