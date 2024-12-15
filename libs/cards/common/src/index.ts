@@ -1,1 +1,1 @@
-export * from './lib/auth-common/auth-common.component';
+export * from './lib/card.interface';
