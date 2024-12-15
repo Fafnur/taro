@@ -19,10 +19,7 @@ export class SpreadController {
 
   @Post()
   async create(@Body() form: SpreadCreateForm, @Request() req: { user: JwtPayload }): Promise<Spread> {
-    return this.service.create({
-      ...form,
-      user: req.user.uuid,
-    });
+    return this.service.create(form, req.user.uuid);
   }
 
   @Patch(':uuid')

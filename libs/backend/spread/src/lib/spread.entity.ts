@@ -21,13 +21,11 @@ export class SpreadEntity implements Spread {
 
   @Column({
     type: 'simple-array',
-    default: [],
   })
   cards!: number[];
 
   @Column({
     type: 'simple-array',
-    default: [],
   })
   additional!: number[];
 

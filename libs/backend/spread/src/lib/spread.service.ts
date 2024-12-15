@@ -22,8 +22,8 @@ export class SpreadService {
     return this.repository.findOneBy({ uuid });
   }
 
-  async create(spread: SpreadCreate & { readonly user: string }): Promise<SpreadEntity> {
-    return this.repository.save(spread);
+  async create(spread: SpreadCreate, user: string): Promise<SpreadEntity> {
+    return this.repository.save({ ...spread, user, cards: [], additional: [] });
   }
 
   async update(uuid: string, data: Partial<SpreadEntity>): Promise<void> {

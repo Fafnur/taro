@@ -21,10 +21,10 @@ export class SpreadChangeForm implements SpreadChange {
   uuid!: string;
 
   @IsNotEmpty()
-  @IsArray()
+  @IsArray({ each: true })
   cards!: number[];
 
   @IsNotEmpty()
-  @IsArray()
+  @IsArray({ each: true })
   additional!: number[];
 }
