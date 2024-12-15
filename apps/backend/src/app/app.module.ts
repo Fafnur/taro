@@ -10,6 +10,7 @@ import { UsersModule } from '@taro/backend/users';
 
 import { AppController } from './app.controller';
 import { configurationFactory, mailFactory, typeOrmFactory } from './config/config';
+import { CardsModule } from '@taro/backend/cards';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { configurationFactory, mailFactory, typeOrmFactory } from './config/conf
     AuthModule,
     UsersModule,
     SpreadsModule,
+    CardsModule,
   ],
   controllers: [AppController],
   providers: [],

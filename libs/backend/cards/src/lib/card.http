@@ -1,0 +1,4 @@
+### GET Spreads
+GET http://localhost:3333/cards
+Content-Type: application/json
+Accept: application/json

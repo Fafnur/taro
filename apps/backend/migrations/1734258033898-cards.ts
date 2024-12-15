@@ -8,7 +8,7 @@ export class Cards1734258033898 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     for (const card of CARDS) {
       await queryRunner.query(
-        `INSERT INTO cards (id, code, isoCode, major) VALUES (${card.id},"${card.code}","${card.isoCode}","${card.major}");`,
+        `INSERT INTO cards (id, code, isoCode, major) VALUES (${card.id},"${card.code}","${card.isoCode}","${card.major ? 1 : 0}");`,
       );
     }
   }
