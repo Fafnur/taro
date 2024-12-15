@@ -1,8 +1,8 @@
 export default {
-  displayName: 'spreads/common',
+  displayName: 'cards/common',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/spreads/common',
+  coverageDirectory: '../../../coverage/libs/cards/common',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
