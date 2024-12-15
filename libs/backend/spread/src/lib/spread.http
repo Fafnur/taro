@@ -1,0 +1,16 @@
+### GET Spreads
+GET http://localhost:3333/spreads
+Content-Type: application/json
+Accept: application/json
+Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiN2Q5N2MxM2EtYjVhMC00MDU2LWJkYjEtMjA3OTIzNjFiZmIzIiwiZW1haWwiOiJhbGV4OTIuc2VyZW5rb0BnbWFpbC5jb20iLCJpYXQiOjE3MzQyMzc0OTgsImV4cCI6MTczNDI0MTA5OH0.R36MyunYBOUSxnu1qW0XxCiLGclZGPJF1M4Nz7v_GA0
+
+### Create Spread
+POST http://localhost:3333/spreads
+Content-Type: application/json
+Accept: application/json
+Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYzk3MjdlNmYtMTk3ZC00MzVkLTk4YzQtOTAxN2Q4Njg2NWEzIiwiZW1haWwiOiJhbGV4OTIuc2VyZW5rb0BnbWFpbC5jb20iLCJpYXQiOjE3MzQyNDk4OTEsImV4cCI6MTczNDI1MzQ5MX0.nhblDiZpVzYvRTWuHs4-VB4uzAefnocJ8FmAQo11T_I
+
+{
+  "type": "single",
+  "uuid": "9ce4cca9-5d97-467d-b93c-4c353e4e9211"
+}

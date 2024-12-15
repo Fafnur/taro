@@ -1,0 +1,40 @@
+### Login
+POST http://localhost:3333/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "alex92.serenko@gmail.com"
+}
+
+### Confirm
+POST http://localhost:3333/auth/confirm
+Content-Type: application/json
+Accept: application/json
+User-Agent: iPhone 12
+
+{
+  "email": "alex92.serenko@gmail.com",
+  "code": "335148"
+}
+
+### Refresh
+POST http://localhost:3333/auth/refresh
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "alex92.serenko@gmail.com",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMDY3ZGFkNmEtMzUzMS00ZGVmLThhZjAtNmViZmQ2MDQxODMyIiwiZW1haWwiOiJhbGV4OTIuc2VyZW5rb0BnbWFpbC5jb20iLCJpYXQiOjE3MzM0MDI3MjEsImV4cCI6MTczNDYxMjMyMX0.I73K2nAftMAW_SEM4XFotYAV-rGM7JfVYhCtTZt4D2o"
+}
+
+
+### Logout
+POST http://localhost:3333/auth/logout
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "alex92.serenko@gmail.com",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMDY3ZGFkNmEtMzUzMS00ZGVmLThhZjAtNmViZmQ2MDQxODMyIiwiZW1haWwiOiJhbGV4OTIuc2VyZW5rb0BnbWFpbC5jb20iLCJpYXQiOjE3MzM0MDM4ODEsImV4cCI6MTczNDYxMzQ4MX0.tNow8pRNQpFG5L8jTreCt0HECR_EiKwLWbVJuSnD6yM"
+}

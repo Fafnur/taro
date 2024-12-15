@@ -46,7 +46,7 @@ Thumbs.db
 # Custom
 .yarn
 package-lock.json
-yarn.lock
+#yarn.lock
 /mocks/tmp
 .env
 .husky/*
