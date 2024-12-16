@@ -5,12 +5,12 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { resolve } from 'node:path';
 
 import { AuthModule } from '@taro/backend/auth';
+import { CardsModule } from '@taro/backend/cards';
 import { SpreadsModule } from '@taro/backend/spread';
 import { UsersModule } from '@taro/backend/users';
 
 import { AppController } from './app.controller';
 import { configurationFactory, mailFactory, typeOrmFactory } from './config/config';
-import { CardsModule } from '@taro/backend/cards';
 
 @Module({
   imports: [
