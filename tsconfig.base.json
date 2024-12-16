@@ -23,6 +23,7 @@
       "@taro/backend/spread": ["libs/backend/spread/src/index.ts"],
       "@taro/backend/users": ["libs/backend/users/src/index.ts"],
       "@taro/cards/common": ["libs/cards/common/src/index.ts"],
+      "@taro/core": ["libs/core/src/index.ts"],
       "@taro/spreads/common": ["libs/spreads/common/src/index.ts"],
       "@taro/ui/layout": ["libs/ui/layout/src/index.ts"],
       "@taro/users/common": ["libs/users/common/src/index.ts"]

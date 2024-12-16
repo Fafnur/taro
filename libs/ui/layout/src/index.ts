@@ -1,1 +1,3 @@
-export * from './lib/layout.component';
+import { LayoutComponent } from './lib/layout.component';
+
+export default LayoutComponent;

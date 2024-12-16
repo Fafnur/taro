@@ -4,19 +4,30 @@ import express from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { RESPONSE } from '@taro/core';
+
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-  const browserDistFolder = resolve(serverDistFolder, '../browser');
+  const locale = serverDistFolder.split('/').at(-1) ?? '';
+  const browserDistFolder = resolve(serverDistFolder, '../browser', locale);
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
+
+  server.get('/healthcheck', (req, res) => {
+    try {
+      res.status(200).json({ uptime: process.uptime() });
+    } catch (e) {
+      res.status(500).json(e);
+    }
+  });
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
@@ -39,7 +50,16 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          {
+            provide: APP_BASE_HREF,
+            useValue: baseUrl,
+          },
+          {
+            provide: RESPONSE,
+            useValue: res,
+          },
+        ],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));
