@@ -55,7 +55,8 @@
     "@nx/angular:component": {
       "style": "scss",
       "changeDetection": "OnPush",
-      "prefix": "taro"
+      "prefix": "taro",
+      "skipTests": true
     },
     "@nx/angular:pipe": {
       "prefix": "taro"
