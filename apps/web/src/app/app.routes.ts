@@ -4,6 +4,11 @@ export const appRoutes: Route[] = [
   {
     path: '',
     loadComponent: () => import('@taro/ui/layout'),
-    children: [],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('@taro/web/home/page'),
+      },
+    ],
   },
 ];
