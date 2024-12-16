@@ -40,7 +40,7 @@ module.exports = [
       'no-new-wrappers': 'error',
       'no-throw-literal': 'error',
       '@typescript-eslint/consistent-type-definitions': 'error',
-      // '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
       'no-shadow': 'off',
       '@typescript-eslint/no-shadow': 'error',
       '@typescript-eslint/naming-convention': [
