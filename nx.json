@@ -43,15 +43,25 @@
       "e2eTestRunner": "none",
       "linter": "eslint",
       "style": "scss",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "prefix": "taro"
     },
     "@nx/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "style": "scss",
+      "prefix": "taro"
     },
     "@nx/angular:component": {
       "style": "scss",
-      "changeDetection": "OnPush"
+      "changeDetection": "OnPush",
+      "prefix": "taro"
+    },
+    "@nx/angular:pipe": {
+      "prefix": "taro"
+    },
+    "@nx/angular:directive": {
+      "prefix": "taro"
     }
   },
   "plugins": [
