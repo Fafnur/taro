@@ -17,8 +17,8 @@
     "paths": {
       "@taro/auth/common": ["libs/auth/common/src/index.ts"],
       "@taro/auth/guards": ["libs/auth/guards/src/index.ts"],
-      "@taro/auth/services": ["libs/auth/services/src/index.ts"],
       "@taro/auth/page": ["libs/auth/page/src/index.ts"],
+      "@taro/auth/services": ["libs/auth/services/src/index.ts"],
       "@taro/backend/auth": ["libs/backend/auth/src/index.ts"],
       "@taro/backend/cards": ["libs/backend/cards/src/index.ts"],
       "@taro/backend/core": ["libs/backend/core/src/index.ts"],
@@ -29,6 +29,7 @@
       "@taro/core": ["libs/core/src/index.ts"],
       "@taro/dashboard/page": ["libs/dashboard/page/src/index.ts"],
       "@taro/spreads/common": ["libs/spreads/common/src/index.ts"],
+      "@taro/ui/icons": ["libs/ui/icons/src/index.ts"],
       "@taro/ui/layout": ["libs/ui/layout/src/index.ts"],
       "@taro/users/common": ["libs/users/common/src/index.ts"],
       "@taro/users/guards": ["libs/users/guards/src/index.ts"],
