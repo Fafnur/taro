@@ -1,8 +1,12 @@
 import type { Route } from '@angular/router';
 
 export const PATHS = {
+  currentRoot: '',
+
   home: '/',
   dashboard: '/dashboard',
+  auth: '/auth',
+  authLogin: '/auth/login',
 
   notFound: '/not-found',
   serverError: '/server-error',
@@ -56,10 +60,9 @@ export function getChildPath(path: PathValues, parent: PathValues): string {
 }
 
 export function childNavigation(route: NavigationChild, parent: PathValues): Route {
-  if (!route.path.length || route.path.length < parent.length + 1) {
-    return route;
-  }
-
+  // if (!route.path.length || route.path.length < parent.length + 1) {
+  //   return route;
+  // }
   return {
     ...route,
     path: getChildPath(route.path, parent),
