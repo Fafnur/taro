@@ -29,6 +29,7 @@
       "@taro/core": ["libs/core/src/index.ts"],
       "@taro/dashboard/page": ["libs/dashboard/page/src/index.ts"],
       "@taro/spreads/common": ["libs/spreads/common/src/index.ts"],
+      "@taro/ui/container": ["libs/ui/container/src/index.ts"],
       "@taro/ui/icons": ["libs/ui/icons/src/index.ts"],
       "@taro/ui/layout": ["libs/ui/layout/src/index.ts"],
       "@taro/users/common": ["libs/users/common/src/index.ts"],
