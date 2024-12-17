@@ -1,1 +1,3 @@
-export * from './lib/dashboard-page/dashboard-page.component';
+import { DashboardPageComponent } from './lib/dashboard-page.component';
+
+export default DashboardPageComponent;
