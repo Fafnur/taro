@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'libs/ui/stylesheets/global' as global;
+@use 'libs/ui/stylesheets/variables' as variables;
 
 @include global.reset();
+@include variables.set();

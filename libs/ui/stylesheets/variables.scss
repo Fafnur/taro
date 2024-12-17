@@ -1,0 +1,8 @@
+@mixin set() {
+  html {
+    --taro-color-primary: #14447e;
+    --taro-color-secondary: #1365cb;
+    --taro-color-ternary: #ffcfe0;
+    --taro-color-quaternary: #ffd38d;
+  }
+}
