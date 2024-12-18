@@ -4,8 +4,8 @@
   align-items: center;
   justify-content: space-between;
   min-height: 100vh;
-  background-color: var(--taro-color-secondary);
   padding: 1rem;
+  background: linear-gradient(180deg, var(--taro-color-quinary) 0%, var(--taro-color-primary) 75%, var(--taro-color-secondary) 100%);
 }
 
 .taro-icon-brand {
